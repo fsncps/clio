@@ -1,0 +1,192 @@
+/* Dashboard Layout */
+ $Red2: #400000;
+ $Rosewater: #f4dbd6;
+ $Flamingo: #f0c6c6;
+ $Pink: #f5bde6;
+ $Mauve: #c6a0f6;
+ $Red: #ed8796;
+ $Maroon: #ee99a0;
+ $Peach: #f5a97f;
+ $Yellow:#eed49f;
+ $Green: #a6da95;
+ $Teal: #8bd5ca;
+ $Sky: #91d7e3;
+ $Sapphire: #7dc4e4;
+ $Blue: #8aadf4;
+ $Lavender: #b7bdf8;
+ $Text: #cad3f5;
+ $Subtext1: #b8c0e0;
+ $Subtext0: #a5adcb;
+ $Overlay2: #939ab7;
+ $Overlay1: #8087a2; 
+ $Overlay0: #6e738d; 
+ $Surface2: #5b6078; 
+ $Surface1: #494d64; 
+ $Surface0: #363a4f; 
+ $Base: #24273a;
+ $Mantle: #1e2030;
+ $Crust: #181926;
+#dash-top-section {
+    height: 70vh;
+}
+
+#dash-bottom-section {
+    height: 30vh;
+}
+
+.tree-container, .markdown-container, .form-container {
+    width: 1fr;
+    margin: 0 1 0 1;
+   border: round white;
+}
+#dash-tree-container, #dash-markdown-container {
+    height: 70vh;
+}
+
+.rich-log {
+   border: tab white;
+
+}
+
+#dash-content-md {
+   height: 70vh;
+   width: 50vw;
+} 
+
+
+
+.controls1 {
+   width: 15vw;
+}
+.controls2 {
+   width: 15vw;
+}
+
+
+
+.controls3 {
+
+   width: 30vw;
+}
+
+#dash-rich-log {
+   width: 50vw;
+   width: 40vw;
+}
+
+
+
+.selected-node {
+    background: #4c566a;  
+    color: white;         
+}
+
+.default-markdown {
+
+}
+.default-markdown > MarkdownH1{
+    color: #ff8000;
+    background: #10101f;
+padding: 1 0 1 0;
+margin: 0 0 1 0;
+border: outer #3a1111;
+}
+MarkdownH2{
+    color: #d8ad78;
+    background: #17172c;
+    text-style: bold;
+    padding: 0 0 0 1;
+    margin: 0 0 1 0;
+border: tall #3a1111;
+}
+MarkdownH3{
+    color: #d8ad78;
+    text-style: bold;
+    padding: 0 0 0 1;
+    margin: 0 0 1 0;
+}
+MarkdownBullet{
+    color: #d8ad78;
+    padding: 0 0 0 2;
+}
+MarkdownParagraph{
+padding: 0 0 1 1;
+margin: 0 0 0 1;
+    color: #d8ba97;
+}
+
+.base_controls_table {
+   background: #ff0000;
+}
+
+ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
+    background: rgba(0, 0, 0, 0.0); 
+    align: center middle;
+}
+
+AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
+    background: rgba(0, 0, 0, 0.0); 
+    align: center middle;
+}
+.selection-list{
+    border-title-align: center;
+    align: center middle;
+    border: panel $Blue;
+    padding: 1 4 1 4;
+   width: 20vw;
+    height: 20vh;
+ }
+
+ .appendix-selector {
+    border-title-align: center;
+   border-title-color: $Text;
+   border-subtitle-color: $Text;
+   border-title-style: bold;
+    align: center middle;
+    border: outer $Red2;
+    padding: 1 6 1 6;
+    width: 30vw;
+    height: 30vh;
+
+ }
+
+OptionList > Option {
+   margin: 3 3 3 3;
+}
+
+#confirm-overlay {
+    background: rgba(30,30,30,0.0);  /* Dark transparent background */
+    align: center middle;
+}
+
+#confirm-box {
+    padding: 2;
+    border: round;
+    align: center middle;
+    height:20vh;
+    width: 35vw;
+}
+
+#confirm-message {
+    text-align: center;
+    padding-bottom: 1;
+}
+
+#confirm-options {
+    text-align: center;
+    color: cyan;
+}
+
+/* OptionList { */
+/*     height: auto; */
+/*     width: 100%; */
+/*     border: solid gray; */
+/*     padding: 1; */
+/* } */
+/**/
+/* .option-list--option { */
+/*     padding: 1; */
+/*     background: black; */
+/*     color: white; */
+/* } */
+/**/

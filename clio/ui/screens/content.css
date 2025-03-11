@@ -1,0 +1,89 @@
+#cnt-right-panel {
+   width: 48vw;
+    height: 100%; /* ✅ Ensure it's visible */
+}
+
+.form-section {
+    height: auto;   /* ✅ Allow it to expand based on content */
+    min-height: 5;  /* ✅ Prevent it from collapsing */
+}
+.expand {
+    width: 100%;  /* ✅ Ensure it fills the container */
+    height: auto;
+    min-height: 2;  /* ✅ Prevent it from collapsing */
+
+
+ }
+#cnt-markdown-container{
+height: 80vh;
+}
+#cnt-content-md {
+height: 80vh;
+ }
+
+#cnt-top-section{
+   height: 80vh;
+}
+
+#dyn-form {
+height: 80vh;
+}
+
+#header-form{ 
+
+}
+
+#content-form{ 
+}
+#form-controls {
+}
+
+#form-controls {
+background: #ff0000;
+}
+
+#right-panel {
+    margin: 0 1 0 1;
+   border: round white;
+   padding: 1 1 1 1;
+}
+
+
+#content-textarea {
+    height: 30vh;  /* ✅ Let it expand to fill its parent */
+    min-height: 5; /* ✅ Prevent collapsing */
+    width: 100%; /* ✅ Ensure full width */
+}
+
+#cnt-rich-log  {
+    width: 40vw;
+height: 20vh;
+}
+#cnt-logger-container{
+    width: 40vw;
+height: 20vh;
+}
+#cnt-right-panel {
+    width: 48vw;
+    height: 100%;
+}
+
+#header-form {
+    height: auto;   /* ✅ Take only the necessary space */
+    min-height: 3;
+}
+
+#content-form {
+    height: auto;  /* ✅ Allow it to fill remaining space */
+    min-height: 10;
+    overflow: hidden; /* ✅ Prevent overflow issues */
+    max-height: 80%;
+}
+
+.form-textarea {
+    height: 1fr;   /* ✅ Take all space inside `content-form` */
+    min-height: 10;
+    width: 100%;
+    overflow: hidden;  /* ✅ Ensure scrolling if needed, prevents overflow issues */
+}
+
