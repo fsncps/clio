@@ -6,14 +6,19 @@ class GenusDB:
     """Handles CRUD operations for genus using raw SQL."""
 
     @staticmethod
-    def create_genus(shortname: str, longname: str, genus_type_id: int):
-        """Insert a new genus record with a UUID."""
-        genus_id = str(uuid.uuid4())  # Generate UUID in Python
-        query = text("INSERT INTO genus (id, shortname, longname, genus_type_id) VALUES (:id, :shortname, :longname, :genus_type_id);")
+    def create_genus(name: str, description: str, genus_type_id: int):
+        """Insert a new genus record using the correct column names."""
+        genus_uuid = str(uuid.uuid4())  # Generate UUID in Python
+        query = text(
+            "INSERT INTO genus (UUID, name, description, genus_type_id) VALUES (:UUID, :name, :description, :genus_type_id);"
+        )
         with engine.connect() as connection:
-            connection.execute(query, {"id": genus_id, "shortname": shortname, "longname": longname, "genus_type_id": genus_type_id})
+            connection.execute(
+                query,
+                {"UUID": genus_uuid, "name": name, "description": description, "genus_type_id": genus_type_id}
+            )
             connection.commit()
-        return genus_id  # Return UUID
+        return genus_uuid  # Return UUID
 
     @staticmethod
     def get_genus(genus_id: str):

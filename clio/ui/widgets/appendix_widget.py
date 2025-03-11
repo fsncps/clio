@@ -35,8 +35,8 @@ class AppendixScreen(Screen):
             for field, placeholder in fields.items()
         }
 
-    def compose(self):
         """Compose the screen layout."""
+    def compose(self):
         popup = Container(
             *self.inputs.values(),
             classes="appendix-selector",

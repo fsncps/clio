@@ -105,6 +105,8 @@ class RecordTree(Tree):
 
         # Get data from the selected node
         if not selected_node or not hasattr(selected_node, "data") or selected_node.data is None:
+
+            log_message(f"Dropping out with {selected_uuid}", "info")    
             return
 
         node_data = selected_node.data

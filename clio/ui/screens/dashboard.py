@@ -19,6 +19,7 @@ from ...ui.widgets.move import MoveRecordWidget
 from ...utils.openai import generate_title_ai
 from ...db.ops import update_record_title
 from ..widgets.selector import AppendixSelectorScreen
+from ..widgets.genus_widget import GenusPopup
 from ..widgets.remove_appendix import AppendixRemoveScreen
 
 ##############################################################################################
@@ -76,6 +77,7 @@ class DashboardScreen(BaseScreen):
     def on_mount(self) -> None:
         """Mount widgets and watch for changes to the markdown content."""
         app_state.dynamic_bindings = {
+        "g": (self.action_add_genus, "Create New Genus"),
         "n": (self.action_add_record, "Create New Record"),
         "e": (self.action_edit_record, "Edit Selected Record"),
         "b": (self.action_generate_embedding, "Generate Embedding"),
@@ -127,6 +129,11 @@ class DashboardScreen(BaseScreen):
 
 ##############################################################################################
 ############################## ADD / EDIT / DELETE RECORD ####################################
+    def action_add_genus(self) -> None:
+        """Action: Add a new record."""
+        log_message("Adding a new genus..", "info")
+        self.app.push_screen(GenusPopup())
+
 
 
     def action_add_record(self) -> None:
