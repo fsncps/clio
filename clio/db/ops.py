@@ -2,6 +2,7 @@ from typing import NamedTuple, Optional
 from .db import get_db
 from typing import Dict, Any
 import json
+from openai import OpenAI
 from clio.core.state import app_state
 from clio.utils.logging import log_message
 from sqlalchemy import text
@@ -313,7 +314,6 @@ def save_appendix_entry_to_db(appendix_type, data):
 ##############################################################################################
 ################################## DELETE FROM DB ############################################
 ##############################################################################################
-##############################################################################################
 
 
 ########### APPENDICES ###########
@@ -339,5 +339,53 @@ def delete_from_database(appendix_type: str, uuid: str):
 
         except Exception as e:
             log_message(f"❌ SQL Error while deleting {appendix_type}: {str(e)}", "error")
+            db.rollback()
+
+#############################################################################################
+################################## EMBEDDINGS ###############################################
+#############################################################################################
+#############################################################################################
+
+def save_embeddings(record):
+    """Generate and store embeddings for a given record."""
+
+    if not app_state.current_UUID:
+        log_message("❌ Cannot save embeddings: No record selected.", "error")
+        return
+
+    # ✅ Ensure valid content
+    content_text = "\n".join(str(value) for value in record.content.values() if value)
+
+    if not content_text.strip():
+        log_message(f"⚠ Skipping embedding generation for {app_state.current_UUID}: Empty content", "warning")
+        return
+
+    # ✅ Generate embedding
+    client = OpenAI()
+    response = client.embeddings.create(input=content_text, model="text-embedding-ada-002")
+    embedding_vector = response.data[0].embedding
+
+    # ✅ Convert to JSON
+    embedding_json = json.dumps(embedding_vector)
+
+    with next(get_db()) as db:
+        try:
+            # ✅ Insert or Update embedding
+            query = text("""
+                INSERT INTO embeddings (rec_UUID, embedding, model)
+                VALUES (:record_UUID, :embedding, 'text-embedding-ada-002')
+                ON DUPLICATE KEY UPDATE embedding = :embedding, model = 'text-embedding-ada-002'
+            """)
+            params = {
+                "record_UUID": app_state.current_UUID,  # ✅ Corrected
+                "embedding": embedding_json
+            }
+
+            db.execute(query, params)
+            db.commit()
+            log_message(f"✅ Embedding stored for record {app_state.current_UUID}", "info")
+
+        except Exception as e:
+            log_message(f"❌ Error storing embedding: {str(e)}", "error")
             db.rollback()
 

@@ -79,10 +79,12 @@ class DynamicFormWidget(Vertical):
         for field in header_fields:
             field_value = content_data.header.get(field, "")
 
-            # ✅ Fix: Convert `None` to an empty string
+            # ✅ Fix: Convert all values to strings
             if field_value is None:
                 log_message(f"⚠ Warning: Header field '{field}' is None. Converting to empty string.", "warning")
                 field_value = ""
+            else:
+                field_value = str(field_value)  # ✅ Ensure it's a string
 
             log_message(f"🔹 Setting header field '{field}' to '{field_value}'", "debug")
 
@@ -98,10 +100,11 @@ class DynamicFormWidget(Vertical):
             existing_ids.add(field_id)
 
             label = Label(f"{field.capitalize()}:", classes="input-label")
-            input_field = Input(id=field_id, value=field_value, classes="expand form-textfield")  # ✅ Prevents None errors
+            input_field = Input(id=field_id, value=field_value, classes="expand form-textfield")  # ✅ Fix: `value` is always a string
 
             self.header_inputs[field] = input_field  # Store reference for updates
             self.header_container.mount(label, input_field)
+
 
 ####################   POPULATE CONTENT FIELD   ##########################
 
@@ -121,10 +124,12 @@ class DynamicFormWidget(Vertical):
         for field in content_fields:
             content_value = content_data.content.get(field, "")
 
-            # ✅ Fix: Ensure `content_value` is a string (convert `None` to "")
+            # ✅ Fix: Convert None or non-string values to strings
             if content_value is None:
                 log_message(f"⚠ Warning: Content field '{field}' is None. Converting to empty string.", "warning")
                 content_value = ""
+            else:
+                content_value = str(content_value)
 
             field_id = f"content-{field}".replace(" ", "-").lower()
 

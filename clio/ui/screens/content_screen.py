@@ -14,7 +14,7 @@ from ...utils.openai import generate_title_ai
 from ...db.ops import update_record_title
 from ..widgets.dynamic_form import DynamicFormWidget 
 from clio.utils.markdown_utils import render_markdown
-from clio.db.ops import save_record_to_db
+from clio.db.ops import save_record_to_db, save_embeddings
 
 ##############################################################################################
 ####################################### CONTENT SCREEN #######################################
@@ -240,7 +240,6 @@ class ContentScreen(BaseScreen):
 
 ############################################# SAVE ###########################################
 
-
     def action_save_to_db(self) -> None:
         """Saves the updated state in `app_state.current_content` to the database and updates UI."""
 
@@ -257,6 +256,13 @@ class ContentScreen(BaseScreen):
         new_title = generate_title_ai()
         update_record_title(app_state.current_UUID, new_title)  # ✅ Update the database
 
+        record = app_state.current_content  # ✅ Get the record from app_state
+
+        log_message(f"💾 Saving record embeddings {app_state.current_UUID}...", "info")  # ✅ Use `app_state.current_UUID`
+        save_embeddings(record)  # ✅ Save embeddings
+
+        log_message(f"✅ Record {app_state.current_UUID} saved with embeddings!", "info")  # ✅ Use `app_state.current_UUID`
+
         # ✅ Call the database save function
         success = save_record_to_db()
         if success:
@@ -266,8 +272,6 @@ class ContentScreen(BaseScreen):
             markdown_widget = self.query_one("#cnt-content-md")
             markdown_widget.update(app_state.current_content_markdown)
             log_message("✅ Markdown widget updated after save.", "info")
-
-        
         else:
             log_message("❌ Error saving record to database.", "error")
 
