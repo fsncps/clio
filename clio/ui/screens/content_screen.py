@@ -65,6 +65,7 @@ class ContentScreen(BaseScreen):
         app_state.dynamic_bindings = {
             "e": (self.action_edit_record, "Edit content"),
             "q": (self.action_quit_screen, "Quit content screen"),
+            "s": (self.action_save_to_db, "Save Buffer to DB"),
         }
 
         markdown_widget = self.screen.query_one("#cnt-content-md")
@@ -253,13 +254,20 @@ class ContentScreen(BaseScreen):
             log_message("❌ Cannot save: `app_state.current_content` is None.", "error")
             return
 
-        new_title = generate_title_ai()
-        update_record_title(app_state.current_UUID, new_title)  # ✅ Update the database
+        # ✅ Check if a title is already set
+        buffer_title = app_state.current_content.header.get("title") or app_state.current_content.header.get("name")
 
-        record = app_state.current_content  # ✅ Get the record from app_state
-
+        if not buffer_title:
+            log_message("🔍 No title found. Generating a new one...", "info")
+            new_title = generate_title_ai()
+            if new_title:
+                update_record_title(app_state.current_UUID, new_title)  # ✅ Update the database
+                app_state.current_content.header["title"] = new_title  # ✅ Update in-memory content
+                log_message(f"✅ New title generated: {new_title}", "info")
+        
+        update_record_title(app_state.current_UUID, buffer_title)  # ✅ Update the database
         log_message(f"💾 Saving record embeddings {app_state.current_UUID}...", "info")  # ✅ Use `app_state.current_UUID`
-        save_embeddings(record)  # ✅ Save embeddings
+        save_embeddings(app_state.current_content)  # ✅ Save embeddings
 
         log_message(f"✅ Record {app_state.current_UUID} saved with embeddings!", "info")  # ✅ Use `app_state.current_UUID`
 

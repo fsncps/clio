@@ -6,6 +6,7 @@ from clio.utils.markdown_utils import render_markdown  # Import the updated tree
 from rich.text import Text
 from clio.core.state import app_state
 from clio.utils.logging import log_message
+from rich.style import Style
 
 
 
@@ -38,6 +39,45 @@ class RecordTree(Tree):
         self.refresh(layout=True)  # ✅ Ensure UI updates
 
 
+    def render_label(self, node, base_style: Style, style: Style) -> Text:
+        """Render a label while preserving expand/collapse icons and applying genus styles."""
+
+        data = node.data or {}
+        rectype = data.get("rectype", "default")
+        node_type = data.get("type", "record")  # "genus" or "record"
+
+        # Preserve expand/collapse icons
+        icon = self.ICON_NODE_EXPANDED if node.is_expanded else self.ICON_NODE
+
+        # Define Rich style mapping
+        style_map = {
+            "topic": Style(color="#eed49f", bold=True),  # Light gold color for topics
+            "genus": Style(color="#ff8000", bold=True),  # Light red/pink for genus
+            "default": Style(color="#cad3f5"),
+        }
+
+        # ✅ Extract text from Rich `Text` object
+        raw_label = node.label.plain if isinstance(node.label, Text) else str(node.label)
+
+        # ✅ Apply genus styling if this is a genus node
+        if node_type == "genus":
+            node_style = style_map["genus"]
+            label_text = f"{raw_label.upper()}"  # ✅ Convert to uppercase
+        else:
+            node_style = style_map.get(rectype, style_map["default"])
+            label_text = f"{icon}{raw_label}"  # Normal text for records
+
+
+        # ✅ Apply special effects to the selected node
+        if node == self.cursor_node:
+            node_style = Style(color="green", bold=True)  # Selected is bold green
+
+        # Preserve Textual cursor/highlight effects
+        full_style = base_style + style + node_style  
+
+        # Render the label with all styles
+        return Text(label_text, style=full_style)
+
     def populate_tree(self):
         """Recursively build the tree structure from the database, with each genus as a separate root."""
         self.clear()  # Ensure we start fresh
@@ -61,11 +101,17 @@ class RecordTree(Tree):
                 record_name = record.get("name", "Unnamed")
                 render_class = record.get("content_render_class", "default")  # ✅ Get class from DB
 
+
+
+                rectype = record.get("rectype", "default")
+                if rectype == "topic":
+                    label_text = f"{record_icon}   {record_name}"  # ✅ Extra spacing for topics
+                else:
+                    label_text = f"{record_icon} {record_name}"  # Default format
+
                 # ✅ Apply the class as text style instead of set_class()
-                record_label = Text(f"{record_icon} {record_name}", style=render_class)
-
+                record_label = label_text
                 node = parent_node.add(record_label)  # ✅ Assign styled text to node
-
                 # ✅ Store record data
                 node.data = {
                     "UUID": record["UUID"],
@@ -78,6 +124,7 @@ class RecordTree(Tree):
                     "type": "record",
                 }
 
+
                 record_nodes[record["UUID"]] = node
                 add_records(node, record["UUID"])  # Recursively add child records
 
@@ -85,7 +132,7 @@ class RecordTree(Tree):
             genus_name = genus["name"]
 
             # ✅ Assign genus label with Nerd Font icon
-            genus_label = Text(f"󰩳 {genus_name}", style="bold yellow")
+            genus_label = Text(f"󰩳  {genus_name}", style="bold yellow")
 
             genus_node = self.root.add(genus_label)
 

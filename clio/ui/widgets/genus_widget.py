@@ -19,8 +19,8 @@ class GenusPopup(Screen):
         """
         super().__init__()
         self.inputs = {
-            "shortname": Input(placeholder="Short Name", classes="expand form-textfield"),
-            "longname": Input(placeholder="Long Name", classes="expand form-textfield"),
+            "shortname": Input(placeholder="Short Name", classes="form-textfield"),
+            "longname": Input(placeholder="Long Name", classes="form-textfield"),
         }
         self.select = Select(self.get_genus_types(), prompt="Select Genus Type")
 

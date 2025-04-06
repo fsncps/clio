@@ -31,7 +31,7 @@ class AppendixScreen(Screen):
         super().__init__()
         self.appendix_type = appendix_type
         self.inputs = {
-            field: Input(placeholder=placeholder, classes="expand form-textfield")
+            field: Input(placeholder=placeholder, classes="form-textfield")
             for field, placeholder in fields.items()
         }
 

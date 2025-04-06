@@ -1,14 +1,7 @@
 from clio.core.state import app_state
 from clio.utils.logging import log_message
-from textual.widgets import Input
 from textual.containers import Container, Vertical
-from textual.widgets import TextArea
 from textual.widgets import Input, TextArea, Label
-from textual.containers import Container
-from textual.containers import Vertical, Container
-from textual.widgets import Label, Input, TextArea
-from clio.core.state import app_state
-from clio.utils.logging import log_message
 from textual.app import ComposeResult
 
 ##############################################################################################
@@ -100,7 +93,7 @@ class DynamicFormWidget(Vertical):
             existing_ids.add(field_id)
 
             label = Label(f"{field.capitalize()}:", classes="input-label")
-            input_field = Input(id=field_id, value=field_value, classes="expand form-textfield")  # ✅ Fix: `value` is always a string
+            input_field = Input(id=field_id, value=field_value, classes="form-textfield")  # ✅ Fix: `value` is always a string
 
             self.header_inputs[field] = input_field  # Store reference for updates
             self.header_container.mount(label, input_field)
@@ -145,7 +138,7 @@ class DynamicFormWidget(Vertical):
             log_message(f"🔹 Setting content field '{field}' as '{field_id}' with value: {content_value}", "debug")
 
             content_label = Label(f"{content_caption}:", classes="input-label")
-            content_input = TextArea(id=field_id, text=content_value, classes="expand form-textarea")  # ✅ Ensures non-null text
+            content_input = TextArea(id=field_id, text=content_value, classes="form-textarea")  # ✅ Ensures non-null text
 
             self.content_inputs[field] = content_input  # Store reference for updates
             self.content_container.mount(content_label, content_input)

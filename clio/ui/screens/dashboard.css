@@ -93,7 +93,7 @@ border: outer #3a1111;
 }
 MarkdownH2{
     color: #d8ad78;
-    background: #17172c;
+    background: #191a2d;
     text-style: bold;
     padding: 0 0 0 1;
     margin: 0 0 1 0;
@@ -110,7 +110,7 @@ MarkdownBullet{
     padding: 0 0 0 2;
 }
 MarkdownParagraph{
-padding: 0 0 1 1;
+padding: 0 0 1 5;
 margin: 0 0 0 1;
     color: #d8ba97;
 }
@@ -190,3 +190,6 @@ OptionList > Option {
 /*     color: white; */
 /* } */
 /**/
+#chat-markdown {
+overflow: auto;
+}
