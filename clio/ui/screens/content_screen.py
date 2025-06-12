@@ -190,13 +190,15 @@ class ContentScreen(BaseScreen):
             form_widget = DynamicFormWidget()
             self.query_one("#dyn-form").mount(form_widget)
             app_state.dynamic_bindings = {
-                "ctrl+enter": (self.update_state_from_form, "Confirm and update buffer"),
+            "ctrl+s": (self.update_state_from_form, "Confirm and update buffer"),
                 "escape": (self.action_discard_form, "Cancel"),
             }
 
     def action_quit_screen(self):
-        """Switch to the Content Editor screen."""
-        self.app.pop_screen()
+        self.app.pop_screen()  # That's it
+
+
+
 
     def action_discard_form(self) -> None:
         """Discards any changes and removes the DynamicFormWidget without saving."""

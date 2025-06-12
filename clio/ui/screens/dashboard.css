@@ -62,7 +62,10 @@
    width: 15vw;
 }
 
-
+Tree > .tree--highlight {
+    background: #4c566a;
+    color: white;
+}
 
 .controls3 {
 

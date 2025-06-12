@@ -76,19 +76,7 @@ class DashboardScreen(BaseScreen):
 
     def on_mount(self) -> None:
         """Mount widgets and watch for changes to the markdown content."""
-        app_state.dynamic_bindings = {
-        "g": (self.action_add_genus, "Create New Genus"),
-        "n": (self.action_add_record, "Create New Record"),
-        "e": (self.action_edit_record, "Edit Selected Record"),
-        "b": (self.action_generate_embedding, "Generate Embedding"),
-        "d": (self.action_delete_record, "Delete Selected Record"),
-        "m": (self.action_move_record, "Move Selected Record"),
-        "c": (self.action_content_screen, "Content Screen"),
-        "a": (self.action_add_appendix, "Add appendix"),
-        "r": (self.action_remove_appendix, "Remove appendix"),
-
-        }
-
+        self.define_dynamic_controls()
         tree = RecordTree(screen=self)
         self.query_one("#dash-tree-container").mount(tree)
 
@@ -102,7 +90,25 @@ class DashboardScreen(BaseScreen):
         dyn_controls = DynamicControlsWidget()
         self.query_one("#dash-controls2").mount(dyn_controls)
 
+    # def on_screen_resume(self):
+    #     dyn_controls = DynamicControlsWidget()
+    #     self.query_one("#dash-controls2").mount(dyn_controls)
 
+    def define_dynamic_controls(self):
+        app_state.dynamic_bindings = {
+            "g": (self.action_add_genus, "Create New Genus"),
+            "n": (self.action_add_record, "Create New Record"),
+            "e": (self.action_edit_record, "Edit Selected Record"),
+            "b": (self.action_generate_embedding, "Generate Embedding"),
+            "d": (self.action_delete_record, "Delete Selected Record"),
+            "m": (self.action_move_record, "Move Selected Record"),
+            "c": (self.action_content_screen, "Content Screen"),
+            "a": (self.action_add_appendix, "Add appendix"),
+            "r": (self.action_remove_appendix, "Remove appendix"),
+        }
+    def on_screen_resume(self):
+        self.define_dynamic_controls()
+        self.query_one(DynamicControlsWidget).refresh_table()
 
 ##############################################################################################
 ###################################### APPENDICES ############################################
