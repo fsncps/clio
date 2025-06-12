@@ -7,6 +7,8 @@ from rich.text import Text
 from clio.core.state import app_state
 from clio.utils.logging import log_message
 from rich.style import Style
+from textual.widgets import Tree
+from textual.events import Key
 
 
 
@@ -38,6 +40,18 @@ class RecordTree(Tree):
         self.populate_tree()  # ✅ Rebuild the tree
         self.refresh(layout=True)  # ✅ Ensure UI updates
 
+
+    def key_right(self) -> None:
+        """Expand current node on →"""
+        node = self.cursor_node
+        if node and not node.is_expanded and node.allow_expand:
+            node.expand()
+
+    def key_left(self) -> None:
+        """Collapse current node on ←"""
+        node = self.cursor_node
+        if node and node.is_expanded:
+            node.collapse()
 
     def render_label(self, node, base_style: Style, style: Style) -> Text:
         """Render a label while preserving expand/collapse icons and applying genus styles."""

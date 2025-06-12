@@ -29,8 +29,8 @@ $Red2: #400000;
 
 
 Tree > .tree--highlight {
-    background: $Red2;  /* Dark gray-blue */
-    color: white;         /* Ensure text is readable */
+    background: #4c566a;
+    color: white;
 }
 
 .tree--book{
