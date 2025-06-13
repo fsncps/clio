@@ -1,0 +1,17 @@
+[project]
+name = "clio"
+version = "0.1.0"
+description = "Clio TUI + CLI"
+authors = [{ name = "fsncps" }]
+dependencies = []
+
+[project.scripts]
+clio = "clio.__main__:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["clio"]
+
