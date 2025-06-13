@@ -24,6 +24,7 @@ class RecordTree(Tree):
         self.populate_tree()  # Populate the tree with data
         self.selected_node = None  # Keep track of the selected node
         self.show_root = False
+        self.show_guides = False
 
     def on_key(self, event):
         """Customize key behavior."""
@@ -70,10 +71,10 @@ class RecordTree(Tree):
             "default": Style(color="#cad3f5"),
         }
 
-        # ✅ Extract text from Rich `Text` object
+        # Extract text from Rich `Text` object
         raw_label = node.label.plain if isinstance(node.label, Text) else str(node.label)
 
-        # ✅ Apply genus styling if this is a genus node
+        # Apply genus styling if this is a genus node
         if node_type == "genus":
             node_style = style_map["genus"]
             label_text = f"{raw_label.upper()}"  # ✅ Convert to uppercase
@@ -82,9 +83,13 @@ class RecordTree(Tree):
             label_text = f"{icon}{raw_label}"  # Normal text for records
 
 
-        # ✅ Apply special effects to the selected node
+        # Apply special effects to the selected node
         if node == self.cursor_node:
             node_style = Style(color="green", bold=True)  # Selected is bold green
+
+        # selected node style
+        if node.data and node.data.get("selected", False):
+            node_style = node_style + Style(bold=True)  # Or use color/background
 
         # Preserve Textual cursor/highlight effects
         full_style = base_style + style + node_style  
