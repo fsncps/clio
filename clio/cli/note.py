@@ -53,16 +53,18 @@ def create_note_to_inbox(note_text: str):
 
         db.commit()
 
-    # Step 5: Generate title after DB insert
-    try:
-        title = generate_title_from_text(note_text)
-        if title:
-            update_record_title(new_UUID, title)
-            print(f"✓ Note saved with AI-generated title: {title}")
-        else:
-            print("✓ Note saved (no title generated).")
-    except Exception as e:
-        print(f"✓ Note saved (AI title generation failed): {e}")
+        # Step 5: Generate title after DB insert
+        try:
+            short_text = note_text[:1000]  # Limit to first 1000 characters to save tokens
+            title = generate_title_from_text(short_text)
+            final_title = title if title else "Note"
+            update_record_title(new_UUID, final_title)
+            print(f"✓ Note saved with title: {final_title}")
+        except Exception as e:
+            fallback_title = "Note"
+            update_record_title(new_UUID, fallback_title)
+            print(f"✓ Note saved (AI title generation failed, used fallback '{fallback_title}'): {e}")
+
 
     return new_UUID
 
