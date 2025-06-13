@@ -45,6 +45,34 @@ class MoveRecordWidget(Widget):
             id="move-container"
         )
 
+    # def confirm_move(self):
+    #     """Confirm and move the record after the user presses `m` again."""
+    #     try:
+    #         tree = self.screen.query_one(RecordTree)  # ✅ Get tree instance
+    #         selected_node = tree.cursor_node  # ✅ Get selected node
+    #
+    #         if selected_node and selected_node.data:
+    #             self.new_parent_UUID = selected_node.data.get("UUID")
+    #
+    #         if not self.new_parent_UUID:
+    #             log_message("No valid parent selected. Move cancelled.", "warning")
+    #             return
+    #
+    #         # ✅ Prevent moving into its own descendant
+    #         descendants = get_all_descendants(self.move_UUID)
+    #         if self.new_parent_UUID in descendants:
+    #             log_message("Error: Cannot move record into its own child.", "error")
+    #             return
+    #
+    #         # Move the record
+    #         self.move_record(self.move_UUID, self.new_parent_UUID)
+    #
+    #         # Remove widget after move
+    #         self.remove()
+    #
+    #         # Reset keybindings and refresh tree
+    #         self.reset_bindings()
+
     def confirm_move(self):
         """Confirm and move the record after the user presses `m` again."""
         try:
@@ -70,8 +98,10 @@ class MoveRecordWidget(Widget):
             # Remove widget after move
             self.remove()
 
-            # Reset keybindings
+            # Reset keybindings and refresh tree
             self.reset_bindings()
+            tree.refresh_tree()
+
 
         except Exception as e:
             log_message(f"Error selecting parent for move: {e}", "error")
