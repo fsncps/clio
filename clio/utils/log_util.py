@@ -4,8 +4,8 @@ import sys
 from ..ui.widgets.log_widget import LoggerWidget
 
 # ✅ Get the correct project root directory
-base_dir = os.path.dirname(os.path.abspath(__file__))  # Gets /home/fsncps/dev/clio/clio
-log_file = os.path.join(base_dir, "logs", "clio.log")  # Forces logs into /home/fsncps/dev/clio/clio/logs
+base_dir = os.path.dirname(os.path.abspath(__file__))  
+log_file = os.path.join(base_dir, "logs", "clio.log") 
 
 # 🔍 Debug: Print the resolved log file path
 print(f"[DEBUG] Resolved log file path: {log_file}")
