@@ -1,11 +1,17 @@
 from sqlalchemy import text
 from ..db.db import get_db
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 import uuid
 
 
 
-
+def update_record_title(record_uuid: str, title: str):
+    with next(get_db()) as db:
+        db.execute(
+            text("UPDATE record SET name = :title WHERE UUID = :uuid"),
+            {"title": title, "uuid": record_uuid}
+        )
+        db.commit()
 
 def move_record(self, record_uuid: str, new_parent_uuid: str):
         """Update the record's parent UUID in the database."""

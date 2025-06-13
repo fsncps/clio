@@ -1,5 +1,5 @@
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from textual.containers import Container, Vertical
 from textual.widgets import Input, TextArea, Label
 from textual.app import ComposeResult

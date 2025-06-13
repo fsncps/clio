@@ -5,7 +5,7 @@ from ...db.ops import fetch_tree_data, fetch_content
 from clio.utils.markdown_utils import render_markdown  # Import the updated tree data fetch
 from rich.text import Text
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from rich.style import Style
 from textual.widgets import Tree
 from textual.events import Key

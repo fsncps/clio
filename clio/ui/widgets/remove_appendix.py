@@ -2,7 +2,7 @@ from textual.screen import Screen
 from textual.widgets import SelectionList, Static
 from sqlalchemy.sql import text
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from textual.css.query import NoMatches
 from clio.db.db import get_db
 from clio.utils.markdown_utils import render_markdown

@@ -6,11 +6,11 @@ from ..widgets.tree_widget import RecordTree
 from ..widgets.log_widget import LoggerWidget
 from textual.widgets import Markdown, Input, TextArea
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from textual import events
 from ..widgets.controls import BaselineControlsWidget, DynamicControlsWidget
 from ...ui.widgets.move import MoveRecordWidget
-from ...utils.openai import generate_title_ai
+# from ...utils.openai import generate_title_ai
 from ...db.ops import update_record_title
 from ..widgets.dynamic_form import DynamicFormWidget 
 from clio.utils.markdown_utils import render_markdown

@@ -2,7 +2,7 @@ from textual.widgets import Static
 from rich.table import Table
 from textual.reactive import reactive
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 
 ##############################################################################################
 ################################# Static Baseline Widget #####################################

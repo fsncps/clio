@@ -9,14 +9,14 @@ from clio.core.state import app_state
 from textual import events
 # from ..widgets.content_widget import DynamicMarkdownViewer
 from textual import on
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from ..widgets.controls import BaselineControlsWidget, DynamicControlsWidget
 from ..widgets.selector import RecordTypeSelector  # Import the new widget
 from ...core.record import create_record
 from ...core.record import recursive_delete
 from ...ui.widgets.confirmation import ConfirmationScreen
 from ...ui.widgets.move import MoveRecordWidget
-from ...utils.openai import generate_title_ai
+# from ...utils.openai_title import generate_title_ai
 from ...db.ops import update_record_title
 from ..widgets.selector import AppendixSelectorScreen
 from ..widgets.genus_widget import GenusPopup
@@ -214,7 +214,7 @@ class DashboardScreen(BaseScreen):
         "b": (self.action_generate_embedding, "Generate Embedding"),
         "d": (self.action_delete_record, "Delete Selected Record"),
         "m": (self.action_move_record, "Delete Selected Record"),
-        "t": (self.action_generate_title, "Generate Title"),
+        # "t": (self.action_generate_title, "Generate Title"),
         "c": (self.action_content_screen, "Content Screen"),
         "a": (self.action_add_appendix, "Add appendix"),
         }
@@ -231,16 +231,16 @@ class DashboardScreen(BaseScreen):
         move_widget = MoveRecordWidget(app_state.current_UUID, app_state.current_record_name)
         self.query_one("#dash-controls2").mount(move_widget)
 
-    def action_generate_title(self):
-        """Generate a title using OpenAI and update the record in the database."""
-        if not app_state.current_UUID:
-            log_message("No record selected for AI title generation.", "warning")
-            return
-
-        new_title = generate_title_ai()
-        if new_title:
-            update_record_title(app_state.current_UUID, new_title)  # ✅ Update the database
-            self.query_one(RecordTree).refresh_tree()  # ✅ Refresh tree to show the new title
+    # def action_generate_title(self):
+    #     """Generate a title using OpenAI and update the record in the database."""
+    #     if not app_state.current_UUID:
+    #         log_message("No record selected for AI title generation.", "warning")
+    #         return
+    #
+    #     new_title = generate_title_ai()
+    #     if new_title:
+    #         update_record_title(app_state.current_UUID, new_title)  # ✅ Update the database
+    #         self.query_one(RecordTree).refresh_tree()  # ✅ Refresh tree to show the new title
 
     def action_generate_embedding(self):
         """Generate and store vector embeddings for the selected record."""

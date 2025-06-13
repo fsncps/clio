@@ -1,6 +1,6 @@
 from textual.widgets import Tree, Static
 from textual.containers import Vertical
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 import numpy as np
 
 import json

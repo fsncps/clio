@@ -1,5 +1,5 @@
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from ..db.db import get_db
 from sqlalchemy import text
 

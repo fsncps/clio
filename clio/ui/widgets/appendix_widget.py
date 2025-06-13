@@ -4,7 +4,7 @@ from textual.containers import Container
 from textual.widgets import Static, Input
 from clio.core.state import app_state
 from clio.db.ops import save_appendix_entry_to_db  
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from clio.utils.markdown_utils import render_markdown
 from textual.css.query import NoMatches
 from textual.screen import Screen

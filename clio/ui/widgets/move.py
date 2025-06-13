@@ -6,7 +6,7 @@ from textual import events
 from textual.widgets import Static
 from textual.widgets import Tree
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from textual import on
 from ...db.db import get_db
 from sqlalchemy.sql import text

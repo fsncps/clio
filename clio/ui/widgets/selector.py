@@ -9,7 +9,7 @@ from sqlalchemy.sql import text  # Import text for raw SQL execution
 from ...core.record import create_record
 from ...db.db import get_db
 from clio.core.state import app_state
-from clio.utils.logging import log_message
+from clio.utils.log_util import log_message
 from textual.app import ComposeResult
 from .appendix_widget import AppendixNoteScreen, AppendixURLScreen, AppendixSourceScreen
 
