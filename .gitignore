@@ -2,7 +2,10 @@
 
 /misc
 *.yaml
+log.txt
 
+#DB dumps
+*.sql
 
 
 # ---> Python
