@@ -28,10 +28,11 @@ $Red2: #400000;
 
 
 
-/* Tree > .tree--highlight { */
-/*     background: #4c566a; */
-/*     color: white; */
-/* } */
+
+.tree--highlight {
+    background: #ff0000;
+    text-style: bold;
+}
 
 /* .tree--book{ */
 /* color: red; */

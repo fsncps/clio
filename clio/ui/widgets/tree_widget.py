@@ -35,11 +35,12 @@ class RecordTree(Tree):
             event.stop()  # Prevent default expansion behavior
 
     def refresh_tree(self):
-        """Refresh the tree by clearing and repopulating it with updated data."""
-        self.clear()  # ✅ Remove all existing nodes
-        self.data = fetch_tree_data()  # ✅ Re-fetch updated data from the database
-        self.populate_tree()  # ✅ Rebuild the tree
-        self.refresh(layout=True)  # ✅ Ensure UI updates
+        """Refresh the tree by fetching fresh data and rebuilding it."""
+        self.data = fetch_tree_data()     # ✅ Re-fetch updated data
+        self.clear()                      # ✅ Clear all nodes
+        self.populate_tree()             # ✅ Rebuild with fresh data
+        self.refresh(layout=True)        # ✅ Repaint the tree
+
 
 
     def key_right(self) -> None:
@@ -67,7 +68,7 @@ class RecordTree(Tree):
         # Define Rich style mapping
         style_map = {
             "topic": Style(color="#eed49f", bold=True),  # Light gold color for topics
-            "genus": Style(color="#ff8000", bold=True),  # Light red/pink for genus
+            "genus": Style(color="#f5a97f", bold=True),  # Light red/pink for genus
             "default": Style(color="#cad3f5"),
         }
 
@@ -85,11 +86,11 @@ class RecordTree(Tree):
 
         # Apply special effects to the selected node
         if node == self.cursor_node:
-            node_style = Style(color="green", bold=True)  # Selected is bold green
+            node_style = Style(color="#b8c0e0", bold=True)  # Selected is bold green
 
         # selected node style
         if node.data and node.data.get("selected", False):
-            node_style = node_style + Style(bold=True)  # Or use color/background
+            node_style = node_style + Style(bold=True,bgcolor="#363a4f",color="#8aadf4")  # Or use color/background
 
         # Preserve Textual cursor/highlight effects
         full_style = base_style + style + node_style  
@@ -115,7 +116,8 @@ class RecordTree(Tree):
             if parent_id not in records_by_parent:
                 return  # No children for this parent
 
-            for record in records_by_parent[parent_id]:
+            for record in sorted(records_by_parent[parent_id], key=lambda r: (r["name"] or "").lower()):
+
                 record_icon = record.get("icon", " ")  
                 record_name = record.get("name", "Unnamed")
                 render_class = record.get("content_render_class", "default")  # ✅ Get class from DB
@@ -147,7 +149,7 @@ class RecordTree(Tree):
                 record_nodes[record["UUID"]] = node
                 add_records(node, record["UUID"])  # Recursively add child records
 
-        for genus in self.data["genera"]:
+        for genus in sorted(self.data["genera"], key=lambda g: g["name"].lower()):
             genus_name = genus["name"]
 
             # ✅ Assign genus label with Nerd Font icon
