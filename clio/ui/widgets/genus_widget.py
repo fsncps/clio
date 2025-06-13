@@ -9,7 +9,7 @@ from ...core.genus import GenusDB
 class GenusPopup(Screen):
     """Popup for adding a new genus."""
     BINDINGS = [
-        ("ctrl+enter", "confirm", "Confirm"),
+        ("ctrl+s", "confirm", "Confirm"),
         ("escape", "cancel", "Cancel"),
     ]
 
@@ -42,7 +42,7 @@ class GenusPopup(Screen):
             classes="genus-popup",
         )
         popup.border_title = "Add New Genus"
-        popup.border_subtitle = "[Ctrl+Enter] Confirm    [Esc] Cancel"
+        popup.border_subtitle = "Ctrl+Enter: Confirm    Esc: Cancel"
         yield popup
 
     def on_mount(self):

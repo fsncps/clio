@@ -1,4 +1,5 @@
 from textual.screen import Screen
+from rich.text import Text
 from textual.containers import Container
 from textual.widgets import Static, Input
 from clio.core.state import app_state
@@ -42,7 +43,8 @@ class AppendixScreen(Screen):
             classes="appendix-selector",
         )
         popup.border_title=f"Add {self.appendix_type.capitalize()} to the Record"
-        popup.border_subtitle="[Ctrl+Enter] Confirm    [Esc] Cancel"
+        popup.border_subtitle = "［Ctrl+Enter］ Confirm    ［Esc］ Cancel"
+        # popup.border_subtitle = "[[Ctrl+Enter]] Confirm    [[Esc]] Cancel"
         yield popup
 
     def on_mount(self):
