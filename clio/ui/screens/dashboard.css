@@ -34,11 +34,17 @@
     height: 30vh;
 }
 
-.tree-container, .markdown-container, .form-container {
-    width: 1fr;
+.markdown-container, .form-container {
+    width: 4fr;
     margin: 0 1 0 1;
    border: round white;
 }
+.tree-container { 
+   width: 3fr;
+   margin: 0 1 0 1;
+   border: round white;
+}
+
 #dash-tree-container, #dash-markdown-container {
     height: 70vh;
 }
@@ -53,19 +59,27 @@
    width: 50vw;
 } 
 
-
+#dash-controls1 {
+   width: 20vw;
+}
+#dash-controls2 {
+   width: 20vw;
+   margin: 0 3 0 3;
+}
 
 .controls1 {
-   width: 15vw;
+   width: 20vw;
+   margin: 0 3 0 3;
 }
 .controls2 {
-   width: 15vw;
+   width: 20vw;
+   margin: 0 3 0 3;
 }
 
-Tree > .tree--highlight {
-    background: #4c566a;
-    color: white;
-}
+/* Tree > .tree--highlight { */
+/*     background: #4c566a; */
+/*     color: white; */
+/* } */
 
 .controls3 {
 
@@ -73,11 +87,22 @@ Tree > .tree--highlight {
 }
 
 #dash-rich-log {
-   width: 50vw;
    width: 40vw;
+   padding: 1 1 1 1;
+   margin: 0 1 0 1;
 }
 
+#base-controls {
+   /* padding: 0 6 0 3; */
+}
 
+#dyn-controls {
+   /* padding: 0 3 0 3; */
+}
+
+#dash-logger-container {
+   width: 45vw;
+}
 
 .selected-node {
     background: #4c566a;  
@@ -118,9 +143,9 @@ margin: 0 0 0 1;
     color: #d8ba97;
 }
 
-.base_controls_table {
-   background: #ff0000;
-}
+/* .base_controls_table { */
+/*    background: #ff0000; */
+/* } */
 
 ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
     background: rgba(0, 0, 0, 0.0); 
@@ -158,7 +183,6 @@ OptionList > Option {
 }
 
 #confirm-overlay {
-    background: rgba(30,30,30,0.0);  /* Dark transparent background */
     align: center middle;
 }
 
@@ -196,3 +220,6 @@ OptionList > Option {
 #chat-markdown {
 overflow: auto;
 }
+
+
+

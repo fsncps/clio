@@ -51,6 +51,8 @@ class DashboardScreen(BaseScreen):
 
     def on_screen_resume(self):
         self.query_one(RecordTree).refresh_tree()
+        self.define_dynamic_controls()
+        self.query_one(DynamicControlsWidget).refresh_table()
 
     @on(Tree.NodeSelected)
     def update_markdown(self) -> None:
@@ -61,6 +63,28 @@ class DashboardScreen(BaseScreen):
         
         markdown_widget.add_class(app_state.current_render_class)
         log_message(f"Added {app_state.current_render_class}", "info")
+
+    @on(Tree.NodeSelected)
+    def handle_tree_selection(self, event: Tree.NodeSelected) -> None:
+        tree = event.control
+
+        # Reset all nodes' selected flags and refresh them
+        def clear_selection(node):
+            if node.data:
+                node.data["selected"] = False
+            node.refresh()  # Ensure render_label() is called
+            for child in node.children:
+                clear_selection(child)
+
+        if tree.root:
+            clear_selection(tree.root)
+
+        # Set selection flag on the selected node
+        if event.node.data is None:
+            event.node.data = {}
+        event.node.data["selected"] = True
+        event.node.refresh()  # Ensure new selection gets re-rendered
+
 
     def on_key(self, event: events.Key) -> None:
         """Check dynamic keybindings and execute actions."""
@@ -85,9 +109,9 @@ class DashboardScreen(BaseScreen):
         self.query_one("#dash-markdown-container").mount(content_viewer)
 
         # ✅ Mount BaseControlsInfo in the "controls" container
-        base_controls = BaselineControlsWidget()
+        base_controls = BaselineControlsWidget(id="base-controls")
         self.query_one("#dash-controls1").mount(base_controls)
-        dyn_controls = DynamicControlsWidget()
+        dyn_controls = DynamicControlsWidget(id="dyn-controls")
         self.query_one("#dash-controls2").mount(dyn_controls)
 
     # def on_screen_resume(self):
@@ -106,9 +130,7 @@ class DashboardScreen(BaseScreen):
             "a": (self.action_add_appendix, "Add appendix"),
             "r": (self.action_remove_appendix, "Remove appendix"),
         }
-    def on_screen_resume(self):
-        self.define_dynamic_controls()
-        self.query_one(DynamicControlsWidget).refresh_table()
+
 
 ##############################################################################################
 ###################################### APPENDICES ############################################
