@@ -102,6 +102,7 @@ class DashboardScreen(BaseScreen):
         """Mount widgets and watch for changes to the markdown content."""
         self.define_dynamic_controls()
         tree = RecordTree(screen=self)
+        tree.id = "rectree"
         self.query_one("#dash-tree-container").mount(tree)
 
         # ✅ Ensure Markdown Viewer is mounted

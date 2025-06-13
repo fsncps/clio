@@ -53,6 +53,10 @@
    border: tab white;
 
 }
+/* RecordTree > .tree--highlight { */
+/*     background: #2a2a2a; */
+/*     text-style: bold; */
+/* } */
 
 #dash-content-md {
    height: 70vh;
@@ -76,10 +80,10 @@
    margin: 0 3 0 3;
 }
 
-/* Tree > .tree--highlight { */
-/*     background: #4c566a; */
-/*     color: white; */
-/* } */
+#rectree--cursor {
+    background: #FF0000;
+    color: white;
+}
 
 .controls3 {
 
