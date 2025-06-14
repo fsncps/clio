@@ -1,9 +1,12 @@
 from textual.widget import Widget
 from textual.containers import Container, Horizontal
+from textual.widgets import OptionList, Input, Select
 from textual.widgets import OptionList, Button, Static
+from textual.widgets.option_list import Option
 from textual.app import ComposeResult
 from textual.events import Key
 from textual.message import Message
+import uuid
 from textual.screen import ModalScreen
 from sqlalchemy.sql import text  # Import text for raw SQL execution
 from ...core.record import create_record
@@ -12,6 +15,7 @@ from clio.core.state import app_state
 from clio.utils.log_util import log_message
 from textual.app import ComposeResult
 from .appendix_widget import AppendixNoteScreen, AppendixURLScreen, AppendixSourceScreen
+from typing import Callable
 
 ##############################################################################################
 ######################## OVERLAY FOR RECTYPE SELECTION FOR NEW RECORD ########################
@@ -77,7 +81,83 @@ class RecordTypeSelector(ModalScreen):
             create_record(rectype, app_state.current_UUID)  # ✅ Create new record
             self.dismiss()
 
+##############################################################################################
+################################ OVERLAY FOR RELTYPE SELECTION ###############################
+##############################################################################################
 
+
+class RelTypeSelector(ModalScreen):
+    """Popup to select a relation type and enter a description."""
+
+    def __init__(self, source_uuid: str, target_uuid: str):
+        super().__init__()
+        self.source_uuid = source_uuid
+        self.target_uuid = target_uuid
+
+    def compose(self):
+        self.description_input = Input(placeholder="Optional description...", id="rel-desc")
+        self.relation_select = Select(
+            options=[],  # initially empty
+            prompt="Select relation type",
+            allow_blank=True,  # ← fix here
+            id="reltype-select"
+        )
+
+        yield Container(
+            Static("Enter a description and choose a relation type.", id="rel-label"),
+            self.description_input,
+            self.relation_select
+        )
+
+    def on_mount(self):
+        """Populate the select widget with relation types from DB."""
+        with next(get_db()) as db:
+            result = db.execute(text("SELECT name, id FROM reltype ORDER BY name"))
+            options = [(name.capitalize(), int(reltype_id)) for name, reltype_id in result]
+            self.relation_select.set_options(options)
+
+            # Set default to ID 99 if it exists
+            for label, value in options:
+                if value == 99:
+                    self.relation_select.value = 99
+                    break
+
+
+    def on_key(self, event: Key) -> None:
+        if event.key == "escape":
+            log_message("❌ Relation creation cancelled.", "info")
+            self.dismiss()
+        elif event.key == "enter":
+            self.confirm_relation()
+
+    def confirm_relation(self):
+        """Confirm selection and insert the relation."""
+        if self.relation_select.is_blank():
+            log_message("⚠ No relation type selected.", "warning")
+            return
+
+        reltype_id = self.relation_select.value
+        description = self.description_input.value.strip()
+
+        new_uuid = str(uuid.uuid4())
+        with next(get_db()) as db:
+            db.execute(
+                text("""
+                    INSERT INTO relations (UUID, rec_UUID, rel_rec_UUID, reltype_id, description)
+                    VALUES (:uuid, :rec, :rel, :reltype, :desc)
+                """),
+                {
+                    "uuid": new_uuid,
+                    "rec": self.source_uuid,
+                    "rel": self.target_uuid,
+                    "reltype": reltype_id,
+                    "desc": description
+                }
+            )
+            db.commit()
+
+        log_message(f"✅ Created relation {self.source_uuid} --[{reltype_id}]--> {self.target_uuid}", "info")
+        self.dismiss()
 
 ##############################################################################################
 ################################ OVERLAY FOR APPENDIX SELECTION ##############################

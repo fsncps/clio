@@ -23,6 +23,7 @@ from ...db.db import engine
 from ..widgets.selector import AppendixSelectorScreen
 from ..widgets.genus_widget import GenusPopup
 from ..widgets.remove_appendix import AppendixRemoveScreen
+from ..widgets.relation import NewRelationWidget 
 
 ##############################################################################################
 ###################################### DASHBOARD SCREEN ######################################
@@ -132,6 +133,7 @@ class DashboardScreen(BaseScreen):
             "c": (self.action_content_screen, "Content Screen"),
             "a": (self.action_add_appendix, "Add appendix"),
             "r": (self.action_remove_appendix, "Remove appendix"),
+            "l": (self.action_new_relation, "New Record Relation"),
         }
 
 
@@ -260,17 +262,22 @@ class DashboardScreen(BaseScreen):
 
     def action_cancel(self) -> None:
         """Cancel operation and context state"""
-        app_state.dynamic_bindings = {
-        "n": (self.action_add_record, "Create New Record"),
-        "e": (self.action_edit_record, "Edit Selected Record"),
-        "b": (self.action_generate_embedding, "Generate Embedding"),
-        "d": (self.action_delete_record, "Delete Selected Record"),
-        "m": (self.action_move_record, "Delete Selected Record"),
-        # "t": (self.action_generate_title, "Generate Title"),
-        "c": (self.action_content_screen, "Content Screen"),
-        "a": (self.action_add_appendix, "Add appendix"),
-        }
+        self.define_dynamic_controls()
+        # app_state.dynamic_bindings = {
+        # "n": (self.action_add_record, "Create New Record"),
+        # "e": (self.action_edit_record, "Edit Selected Record"),
+        # "b": (self.action_generate_embedding, "Generate Embedding"),
+        # "d": (self.action_delete_record, "Delete Selected Record"),
+        # "m": (self.action_move_record, "Delete Selected Record"),
+        #  "r": (self.action_new_relation, "New Record Relation"),
+        # "c": (self.action_content_screen, "Content Screen"),
+        # "a": (self.action_add_appendix, "Add appendix"),
+        # }
 
+    def action_new_relation(self):
+        current = app_state.current_UUID
+        name = app_state.current_record_name or "Unnamed"
+        self.query_one("#dash-controls2").mount(NewRelationWidget(current, name))
 
 
     def action_move_record(self):
