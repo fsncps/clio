@@ -95,7 +95,7 @@ class RelTypeSelector(PopupScreen):
         self.target_uuid = target_uuid
 
     def compose(self):
-        self.description_input = Input(placeholder="Optional description...", id="rel-desc")
+        self.description_input = Input(placeholder="Relation...", id="rel-desc")
         self.relation_select = Select(
             options=[],  # initially empty
             prompt="Select relation type",
