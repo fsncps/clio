@@ -25,6 +25,6 @@ mysql -u cliouser -p clio < db/clio_schema.sql
 Configure environment variable with the connection string:
 ```bash
 mysql -u cliouser -p clio < db/clio_schema.sqexport CLIO_DB_URL="mysql+pymysql://clio_user:strongpassword@localhost/clio"
-``
+```
 
 
