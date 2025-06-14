@@ -9,28 +9,29 @@ from textual.message import Message
 import uuid
 from textual.screen import ModalScreen
 from sqlalchemy.sql import text  # Import text for raw SQL execution
-from ...core.record import create_record
-from ...db.db import get_db
+from ....core.record import create_record
+from ....db.db import get_db
 from clio.core.state import app_state
 from clio.utils.log_util import log_message
 from textual.app import ComposeResult
-from .appendix_widget import AppendixNoteScreen, AppendixURLScreen, AppendixSourceScreen
+from .appendix import AppendixNoteScreen, AppendixURLScreen, AppendixSourceScreen
 from typing import Callable
+from .baseline_popup import PopupScreen
 
 ##############################################################################################
 ######################## OVERLAY FOR RECTYPE SELECTION FOR NEW RECORD ########################
 ##############################################################################################
 
-class RecordTypeSelector(ModalScreen):
+class RecordTypeSelector(PopupScreen):
     """Popup to select a record type and create a new record."""
+    def __init__(self):
+        super().__init__(title="Select Record Type")
 
-    def compose(self):
-        """Define the UI layout and populate options."""
-        log_message("🔍 Debug: Composing RecordTypeSelector UI...", "debug")
+    def compose(self) -> ComposeResult:
+        self.option_list = OptionList(id="rectype-options", classes="selection-list")
+        self.option_list.border_title = "Select Record Type"
 
-        self.option_list = OptionList(id="rectype-options", classes="selection-list")  # ✅ Ensure OptionList exists
-        self.option_list.border_title="Select Record Type" 
-        yield self.option_list
+        yield from self.compose_popup(self.option_list)
 
 
     def on_mount(self):
@@ -86,11 +87,10 @@ class RecordTypeSelector(ModalScreen):
 ##############################################################################################
 
 
-class RelTypeSelector(ModalScreen):
+class RelTypeSelector(PopupScreen):
     """Popup to select a relation type and enter a description."""
-
     def __init__(self, source_uuid: str, target_uuid: str):
-        super().__init__()
+        super().__init__(title="Specify Relation")
         self.source_uuid = source_uuid
         self.target_uuid = target_uuid
 
@@ -103,11 +103,8 @@ class RelTypeSelector(ModalScreen):
             id="reltype-select"
         )
 
-        yield Container(
-            Static("Enter a description and choose a relation type.", id="rel-label"),
-            self.description_input,
-            self.relation_select
-        )
+        yield from self.compose_popup(self.description_input, self.relation_select)
+
 
     def on_mount(self):
         """Populate the select widget with relation types from DB."""
@@ -163,8 +160,10 @@ class RelTypeSelector(ModalScreen):
 ################################ OVERLAY FOR APPENDIX SELECTION ##############################
 ##############################################################################################
 
-class AppendixSelectorScreen(ModalScreen):
+class AppendixSelectorScreen(PopupScreen):
     """Popup for selecting an appendix type to add to the current record."""
+    def __init__(self):
+        super().__init__(title="Select Appendix Type")
 
     def compose(self):
         """Create the UI layout with an OptionList and buttons."""
@@ -172,7 +171,7 @@ class AppendixSelectorScreen(ModalScreen):
 
         self.option_list = OptionList(id="appendix-options", classes="selection-list")  # ✅ Ensure OptionList exists
         self.option_list.border_title="Select Appendix Type" 
-        yield self.option_list
+        yield from self.compose_popup(self.option_list)
         
         # ✅ Ensures the OptionList is part of the UI
         # yield Container(
@@ -235,4 +234,5 @@ class AppendixSelectorScreen(ModalScreen):
                 self.app.push_screen(AppendixURLScreen())
             else:
                 log_message("⚠ Warning: No valid appendix selected.", "warning")
+
 

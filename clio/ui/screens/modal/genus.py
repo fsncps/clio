@@ -3,10 +3,11 @@ from textual.screen import Screen
 from textual.containers import Container
 from textual.widgets import Input, Select
 from textual.app import ComposeResult
-from ...db.db import engine
-from ...core.genus import GenusDB
+from ....db.db import engine
+from ....core.genus import GenusDB
+from .baseline_popup import PopupScreen
 
-class GenusPopup(Screen):
+class GenusPopup(PopupScreen):
     """Popup for adding or editing a genus."""
     BINDINGS = [
         ("ctrl+s", "confirm", "Confirm"),
@@ -19,7 +20,7 @@ class GenusPopup(Screen):
         :param mode: "create" or "edit"
         :param genus_data: dict with existing genus info (for edit mode)
         """
-        super().__init__()
+        super().__init__(title="Genus Details")
         self.mode = mode
         self.genus_data = genus_data or {}
         self.inputs = {
@@ -39,16 +40,12 @@ class GenusPopup(Screen):
 
 
     def compose(self) -> ComposeResult:
-        """Compose the popup layout."""
-        popup = Container(
+        yield from self.compose_popup(
             self.inputs["shortname"],
             self.inputs["longname"],
-            self.select,
-            classes="genus-popup",
+            self.select
         )
-        popup.border_title = "Add New Genus"
-        popup.border_subtitle = "Ctrl+S: Confirm    Esc: Cancel"
-        yield popup
+
 
     def on_mount(self):
         """Focus the first input field and prefill if editing."""
@@ -88,11 +85,6 @@ class GenusPopup(Screen):
 
 
 
-    def action_cancel(self):
-        """Cancel and close the popup."""
-        log_message("❌ Genus addition canceled.", "info")
-        self.dismiss()
-
     @staticmethod
     def update_genus(uuid: str, shortname: str, longname: str, type_id: int):
         query = text("""
@@ -107,4 +99,5 @@ class GenusPopup(Screen):
 def log_message(message, level="info"):
     """Placeholder logging function."""
     print(f"[{level.upper()}] {message}")
+
 

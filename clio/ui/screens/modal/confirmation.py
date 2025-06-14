@@ -2,19 +2,25 @@ from textual.screen import Screen
 from textual.containers import Container
 from textual.widgets import Static
 from textual import events
+from typing import Callable
+
+from .baseline_popup import PopupScreen
 
 ##############################################################################################
 ########################### Confirmation Modal for Deletions etc. ############################
 
 class ConfirmationScreen(Screen):
     """A full-screen confirmation overlay that locks interactions."""
+    def __init__(self, message: str, on_confirm: Callable):
+        super().__init__(classes="popup-screen")
+        self.message = message
+        self.on_confirm = on_confirm
+
 
     BINDINGS = [("y", "confirm", "Confirm"), ("n", "cancel", "Cancel")]
 
-    def __init__(self, message: str, on_confirm: callable):
-        super().__init__()
-        self.message = message
-        self.on_confirm = on_confirm
+
+
 
     def compose(self):
         """Compose the screen with a full-screen background and centered confirmation box."""
