@@ -150,38 +150,45 @@ margin: 0 0 0 1;
 /* .base_controls_table { */
 /*    background: #ff0000; */
 /* } */
-.genus-popup, .reltype-select {
+.modal-popup {
     width: 50%;
     height: auto;
     min-width: 40;
     max-width: 80;
 
     padding: 2 3;
-    background: $surface;
+/*     background: green; */
+        /* background: rgba(0, 0, 0, 0.0); */
     border: solid white;
     border-title-color: yellow;
     border-subtitle-color: gray;
     align: center middle;
 }
+#modal-center {
+    background: transparent;
+    align: center middle;
+    width: auto;
+    height: auto;
+    min-height: 1;
+}
 
-GenusPopup, RelTypeSelector, ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
+.popup-screen {
     background: rgba(0, 0, 0, 0.0); 
     align: center middle;
 }
 
-AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
-    background: rgba(0, 0, 0, 0.0); 
-    align: center middle;
-}
-.selection-list{
-    border-title-align: center;
-    align: center middle;
-    border: panel $Blue;
-    padding: 1 4 1 4;
-   width: 20vw;
-    height: 20vh;
- }
 
+/* Styled modal box */
+/* .reltype-popup { */
+/*     width: 50%; */
+/*     padding: 2 3; */
+/*     background: $surface; */
+/*     border: solid white; */
+/*     border-title-color: yellow; */
+/*     border-subtitle-color: gray; */
+/*     min-width: 40; */
+/*     max-width: 80; */
+/* } */
  .appendix-selector {
     border-title-align: center;
    border-title-color: $Text;

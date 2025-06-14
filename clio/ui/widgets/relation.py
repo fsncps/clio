@@ -8,7 +8,7 @@ from clio.utils.log_util import log_message
 from ...db.db import get_db
 from sqlalchemy.sql import text
 from ..widgets.tree_widget import RecordTree
-from .selector import RelTypeSelector
+from ...ui.screens.modal.selector import RelTypeSelector
 # from textual.widgets import OptionList, Input
 # from textual.widgets.option_list import Option
 

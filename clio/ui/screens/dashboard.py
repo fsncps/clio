@@ -12,17 +12,17 @@ from textual import events
 from textual import on
 from clio.utils.log_util import log_message
 from ..widgets.controls import BaselineControlsWidget, DynamicControlsWidget
-from ..widgets.selector import RecordTypeSelector  # Import the new widget
+from .modal.selector import RecordTypeSelector  # Import the new widget
 from ...core.record import create_record
 from ...core.record import recursive_delete
-from ...ui.widgets.confirmation import ConfirmationScreen
+from .modal.confirmation import ConfirmationScreen
 from ...ui.widgets.move import MoveRecordWidget
 # from ...utils.openai_title import generate_title_ai
 from ...db.ops import update_record_title
 from ...db.db import engine
-from ..widgets.selector import AppendixSelectorScreen
-from ..widgets.genus_widget import GenusPopup
-from ..widgets.remove_appendix import AppendixRemoveScreen
+from .modal.selector import AppendixSelectorScreen
+from .modal.genus import GenusPopup
+from .modal.appendix import AppendixRemoveScreen
 from ..widgets.relation import NewRelationWidget 
 
 ##############################################################################################
@@ -290,16 +290,7 @@ class DashboardScreen(BaseScreen):
         move_widget = MoveRecordWidget(app_state.current_UUID, app_state.current_record_name)
         self.query_one("#dash-controls2").mount(move_widget)
 
-    # def action_generate_title(self):
-    #     """Generate a title using OpenAI and update the record in the database."""
-    #     if not app_state.current_UUID:
-    #         log_message("No record selected for AI title generation.", "warning")
-    #         return
-    #
-    #     new_title = generate_title_ai()
-    #     if new_title:
-    #         update_record_title(app_state.current_UUID, new_title)  # ✅ Update the database
-    #         self.query_one(RecordTree).refresh_tree()  # ✅ Refresh tree to show the new title
+
 
     def action_generate_embedding(self):
         """Generate and store vector embeddings for the selected record."""
