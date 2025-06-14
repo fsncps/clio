@@ -1,4 +1,5 @@
 from .base_screen import BaseScreen
+from sqlalchemy import text
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical, Container
 from ..widgets.tree_widget import RecordTree
@@ -18,6 +19,7 @@ from ...ui.widgets.confirmation import ConfirmationScreen
 from ...ui.widgets.move import MoveRecordWidget
 # from ...utils.openai_title import generate_title_ai
 from ...db.ops import update_record_title
+from ...db.db import engine
 from ..widgets.selector import AppendixSelectorScreen
 from ..widgets.genus_widget import GenusPopup
 from ..widgets.remove_appendix import AppendixRemoveScreen
@@ -123,7 +125,7 @@ class DashboardScreen(BaseScreen):
         app_state.dynamic_bindings = {
             "g": (self.action_add_genus, "Create New Genus"),
             "n": (self.action_add_record, "Create New Record"),
-            "e": (self.action_edit_record, "Edit Selected Record"),
+            "e": (self.action_edit, "Edit Selected Record"),
             "b": (self.action_generate_embedding, "Generate Embedding"),
             "d": (self.action_delete_record, "Delete Selected Record"),
             "m": (self.action_move_record, "Move Selected Record"),
@@ -163,6 +165,42 @@ class DashboardScreen(BaseScreen):
         log_message("Adding a new genus..", "info")
         self.app.push_screen(GenusPopup())
 
+    def action_edit(self) -> None:
+        """Edit the selected genus or record."""
+        if app_state.current_genus_UUID:
+            log_message("✏️ Editing selected genus...", "info")
+            self.action_edit_genus()
+        elif app_state.current_UUID:
+            log_message("✏️ Editing selected record...", "info")
+            self.action_edit_record()
+        else:
+            log_message("⚠ No genus or record selected for editing.", "warning")
+
+    def action_edit_genus(self) -> None:
+        """Action: Edit the currently selected genus."""
+        genus_id = app_state.current_genus_UUID
+        if not genus_id:
+            log_message("⚠ No genus selected for editing.", "warning")
+            return
+
+        query = text("SELECT name, description, genus_type_id FROM genus WHERE uuid = :uuid")
+
+        with engine.connect() as connection:
+            result = connection.execute(query, {"uuid": genus_id}).fetchone()
+
+        if not result:
+            log_message("❌ Genus not found in database.", "error")
+            return
+
+        genus_data = {
+            "uuid": genus_id,
+            "shortname": result[0],   # ← maps to name
+            "longname": result[1],    # ← maps to description
+            "type_id": result[2],     # ← maps to genus_type_id
+        }
+
+
+        self.app.push_screen(GenusPopup(mode="edit", genus_data=genus_data))
 
 
     def action_add_record(self) -> None:

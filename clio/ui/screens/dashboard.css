@@ -150,8 +150,21 @@ margin: 0 0 0 1;
 /* .base_controls_table { */
 /*    background: #ff0000; */
 /* } */
+.genus-popup {
+    width: 50%;
+    height: auto;
+    min-width: 40;
+    max-width: 80;
 
-ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
+    padding: 2 3;
+    background: $surface;
+    border: solid white;
+    border-title-color: yellow;
+    border-subtitle-color: gray;
+    align: center middle;
+}
+
+GenusPopup, ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
     background: rgba(0, 0, 0, 0.0); 
     align: center middle;
 }
