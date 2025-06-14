@@ -49,7 +49,7 @@ def create_record(rectype: str, current_UUID: str):
 
         # Insert into the specific rectype table
         query = f"""
-            INSERT INTO {rectype} (rec_UUID)
+            INSERT INTO `{rectype}` (rec_UUID)
             VALUES (:UUID)
         """
 
@@ -77,7 +77,7 @@ def recursive_delete(record_uuid):
     def delete_record(uuid, rectype):
         """Delete a single record from the content and record tables."""
         with next(get_db()) as db:
-            delete_content_query = text(f"DELETE FROM {rectype} WHERE rec_UUID = :record_uuid")
+            delete_content_query = text(f"DELETE FROM `{rectype}ì` WHERE rec_UUID = :record_uuid")
             db.execute(delete_content_query, {"record_uuid": uuid})
 
             delete_record_query = text("DELETE FROM record WHERE UUID = :record_uuid")
