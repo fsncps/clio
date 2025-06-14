@@ -39,7 +39,7 @@ class GenusDB:
     @staticmethod
     def delete_genus(genus_id: str):
         """Delete a genus record by UUID."""
-        query = text("DELETE FROM genus WHERE id = :genus_id;")
+        query = text("DELETE FROM genus WHERE uuid = :genus_id;")
         with engine.connect() as connection:
             connection.execute(query, {"genus_id": genus_id})
             connection.commit()

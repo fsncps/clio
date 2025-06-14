@@ -188,17 +188,30 @@ class DashboardScreen(BaseScreen):
 
 
     def action_delete_record(self):
-        """Triggered by a keybinding to delete a record."""
-        if not app_state.current_UUID or not app_state.current_rectype:
-            log_message("No record selected for deletion.", "warning")
-            return  
+        """Triggered by a keybinding to delete a record or genus."""
+        uuid = app_state.current_UUID or app_state.current_genus_UUID
+
+        if not uuid:
+            log_message("No record or genus selected for deletion.", "warning")
+            return
 
         def confirm_deletion():
-            recursive_delete(app_state.current_UUID)
-            log_message(f"Deleted record: {app_state.current_UUID}", "info")
+            recursive_delete(uuid)
+            log_message(f"Recursively deleted children of: {uuid}", "info")
 
-        # Push the confirmation screen
-        self.app.push_screen(ConfirmationScreen("Delete this record? (y/n)", confirm_deletion))
+            if app_state.current_genus_UUID:
+                from ...core.genus import GenusDB
+                GenusDB.delete_genus(app_state.current_genus_UUID)
+                log_message(f"Deleted genus: {app_state.current_genus_UUID}", "info")
+                app_state.current_genus_UUID = None
+
+            if app_state.current_UUID:
+                log_message(f"Deleted record: {app_state.current_UUID}", "info")
+                app_state.current_UUID = None
+                app_state.current_rectype = None
+
+        self.app.push_screen(ConfirmationScreen("Delete this item and all its children? (y/n)", confirm_deletion))
+
 
 ##############################################################################################
 #################################### VARIOUS ACTIONS #########################################

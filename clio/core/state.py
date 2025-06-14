@@ -13,6 +13,7 @@ class ClioState(App):
     current_rectype = reactive(None)  # Name of the record type
     current_schema = reactive[Dict[str, Any]]({})  # Explicit typing
     current_record_name = reactive("")  # The name of the record
+    current_genus_UUID = reactive(None)  # UUID of the selected genus
 
     # Record content
     current_content = reactive(None)  # Dynamic class object from schema

@@ -171,69 +171,74 @@ class RecordTree(Tree):
         """Handle node selection, update state, and apply selection styling."""
         selected_node: TreeNode = event.node
 
-        # Get data from the selected node
         if not selected_node or not hasattr(selected_node, "data") or selected_node.data is None:
-
-            log_message(f"Dropping out with {selected_uuid}", "info")    
+            log_message("Node selection failed: missing or invalid node data", "warning")
             return
 
         node_data = selected_node.data
         selected_uuid = node_data.get("UUID")
+        node_type = node_data.get("type")
 
-        # Log selection
-        log_message(f"Selected UUID: {selected_uuid}", "info")    
+        log_message(f"Node data: {node_data}", "debug")
+        log_message(f"Selected UUID: {selected_uuid}", "info")
 
-        if selected_uuid:
-            if node_data["type"] == "record":  # ✅ Handle record selection
-                # Update AppState with record data
-                app_state.current_UUID = selected_uuid
-                app_state.current_rectype = node_data.get("rectype")
-                app_state.current_render_class = node_data.get("content_render_class")
-                app_state.current_content_caption = node_data.get("content_caption")
-                app_state.current_schema = node_data.get("content_schema")
-                app_state.current_record_name = node_data.get("name")
-                app_state.current_content_markdown: reactive[str | None] = reactive("")  # Reset content markdown for now
-                
-                # Fetch content based on the current UUID, rectype, and schema
-                content_instance = fetch_content(selected_uuid)
+        if node_type == "record" and selected_uuid:
+            # ✅ Record selected
+            app_state.current_UUID = selected_uuid
+            app_state.current_rectype = node_data.get("rectype")
+            app_state.current_render_class = node_data.get("content_render_class")
+            app_state.current_content_caption = node_data.get("content_caption")
+            app_state.current_schema = node_data.get("content_schema")
+            app_state.current_record_name = node_data.get("name")
+            app_state.current_content_markdown = reactive("")  # Reset
+            app_state.current_genus_UUID = None  # Clear genus selection
 
-                if content_instance:
-                    log_message(f"Fetched content for {selected_uuid}: {content_instance.content}", "info")
-                    markdown = render_markdown(content_instance)
-                    app_state.current_content_markdown = markdown
-                    log_message(f"Rendered Markdown for {app_state.current_rectype} {selected_uuid}", "info")
-                else:
-                    log_message(f"Failed to fetch content for {selected_uuid}", "warning")
+            content_instance = fetch_content(selected_uuid)
+            if content_instance:
+                log_message(f"Fetched content for {selected_uuid}: {content_instance.content}", "info")
+                markdown = render_markdown(content_instance)
+                app_state.current_content_markdown = markdown
+                log_message(f"Rendered Markdown for {app_state.current_rectype} {selected_uuid}", "info")
+            else:
+                log_message(f"Failed to fetch content for {selected_uuid}", "warning")
 
-            elif node_data["type"] == "genus":  # ✅ Handle genus selection
-                log_message(f"Selected genus: {node_data['name']}", "info")
+        elif node_type == "genus" and selected_uuid:
+            # ✅ Genus selected
+            log_message(f"Selected genus: {node_data.get('name')} ({selected_uuid})", "info")
 
-                # Render genus information as markdown
-                genus_markdown = f"# {node_data['name']}\n\n{node_data['description']}"
-                app_state.current_content_markdown = genus_markdown
-                app_state.current_render_class = "default-markdown"
+            app_state.current_UUID = None
+            app_state.current_rectype = None
+            app_state.current_genus_UUID = selected_uuid
 
-            # Reset styles by traversing all nodes
-            def reset_styles(node: TreeNode):
-                if isinstance(node.label, Text):
-                    node.label.stylize("white")  # Reset to default
-                for child in node.children:
-                    reset_styles(child)
+            genus_markdown = f"# {node_data['name']}\n\n{node_data['description']}"
+            app_state.current_content_markdown = genus_markdown
+            app_state.current_render_class = "default-markdown"
 
-            reset_styles(self.root)
+        else:
+            log_message("Node selection failed: unrecognized or missing type/UUID", "warning")
+            return
 
-            # Apply selected style
-            if isinstance(selected_node.label, Text):
-                selected_node.label.stylize("bold green")
-                log_message(f"app_state.current_UUID: {app_state.current_UUID}", "info")
-                log_message(f"app_state.current_rectype: {app_state.current_rectype}", "info")
-                log_message(f"app_state.current_schema: {app_state.current_schema}", "info")
-                log_message(f"app_state.current_record_name: {app_state.current_record_name}", "info")
-                log_message(f"app_state.current_content: {app_state.current_content}", "info")
-                log_message(f"app_state.current_UUID: {app_state.current_render_class}", "info")
-                log_message(f"app_state.current_content_markdown: {app_state.current_content_markdown}", "info")
+        # Reset all styles
+        def reset_styles(node: TreeNode):
+            if isinstance(node.label, Text):
+                node.label.stylize("white")
+            for child in node.children:
+                reset_styles(child)
 
+        reset_styles(self.root)
 
+        # Apply selection style
+        if isinstance(selected_node.label, Text):
+            selected_node.label.stylize("bold green")
 
-            self.refresh(layout=True)
+        # Log final app state
+        log_message(f"app_state.current_UUID: {app_state.current_UUID}", "info")
+        log_message(f"app_state.current_genus_UUID: {app_state.current_genus_UUID}", "info")
+        log_message(f"app_state.current_rectype: {app_state.current_rectype}", "info")
+        log_message(f"app_state.current_schema: {app_state.current_schema}", "info")
+        log_message(f"app_state.current_record_name: {app_state.current_record_name}", "info")
+        log_message(f"app_state.current_render_class: {app_state.current_render_class}", "info")
+        log_message(f"app_state.current_content_markdown: {app_state.current_content_markdown}", "info")
+
+        self.refresh(layout=True)
 
