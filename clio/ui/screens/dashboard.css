@@ -150,7 +150,7 @@ margin: 0 0 0 1;
 /* .base_controls_table { */
 /*    background: #ff0000; */
 /* } */
-.genus-popup {
+.genus-popup, .reltype-select {
     width: 50%;
     height: auto;
     min-width: 40;
@@ -164,7 +164,7 @@ margin: 0 0 0 1;
     align: center middle;
 }
 
-GenusPopup, ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
+GenusPopup, RelTypeSelector, ConfirmationScreen, AppendixScreen, AppendixRemoveScreen, RecordTypeSelector, AppendixSelectorScreen  {
     background: rgba(0, 0, 0, 0.0); 
     align: center middle;
 }
