@@ -5,7 +5,7 @@
 log.txt
 
 #DB dumps
-*.sql
+*dump*.sql
 
 
 # ---> Python
