@@ -5,7 +5,7 @@ from ..ui.widgets.log_widget import LoggerWidget
 
 # ✅ Get the correct project root directory
 base_dir = os.path.dirname(os.path.abspath(__file__))  
-log_file = os.path.join(base_dir, "logs", "clio.log") 
+log_file = os.path.join(os.path.expanduser("~"), ".clio", "clio_log.txt") 
 
 # 🔍 Debug: Print the resolved log file path
 print(f"[DEBUG] Resolved log file path: {log_file}")
