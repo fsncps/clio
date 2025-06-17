@@ -13,6 +13,7 @@ from ...ui.widgets.move import MoveRecordWidget
 # from ...utils.openai import generate_title_ai
 from ...db.ops import update_record_title
 from ..widgets.dynamic_form import DynamicFormWidget 
+from ..widgets.relation import RelationListWidget 
 from clio.utils.markdown_utils import render_markdown
 from clio.db.ops import save_record_to_db, save_embeddings
 
@@ -76,11 +77,19 @@ class ContentScreen(BaseScreen):
         markdown_widget.add_class(app_state.current_render_class)
         log_message(f"Added {app_state.current_render_class}", "info")
 
-        # ✅ Mount controls into right-side panel
+        # Mount static control widgets
         self.query_one("#cnt-controls1").mount(BaselineControlsWidget())
         self.query_one("#cnt-controls2").mount(DynamicControlsWidget())
 
+        # ✅ Mount relation list into #dyn-form
+        relation_table = RelationListWidget()
+        self.query_one("#dyn-form").mount(relation_table)
 
+        if app_state.current_UUID:
+            log_message(f"[RelationWidget] Setting UUID: {app_state.current_UUID}", "debug")
+            relation_table.set_uuid(app_state.current_UUID)
+        else:
+            log_message("[RelationWidget] UUID not set yet", "warning")
 
 
 

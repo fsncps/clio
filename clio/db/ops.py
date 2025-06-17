@@ -311,6 +311,42 @@ def save_appendix_entry_to_db(appendix_type, data):
             db.rollback()
             return False
 
+#####################################################################
+##### FETCH RELATIONS  ##############################################
+#####################################################################
+
+def fetch_relations_for_record(uuid: str) -> list[dict]:
+    log_message(f"[SQL] Fetching relations for UUID: {uuid}", "debug")
+
+    with next(get_db()) as db:
+        result = db.execute(text("""
+            SELECT
+                r.rel_rec_UUID AS target_id,
+                target.name AS target_name,
+                rt.name AS reltype_label,
+                r.description,
+                '→' AS direction
+            FROM relations r
+            JOIN record target ON r.rel_rec_UUID = target.uuid
+            JOIN reltype rt ON r.reltype_id = rt.id
+            WHERE r.rec_UUID = :uuid
+
+            UNION
+
+            SELECT
+                r.rec_UUID AS target_id,
+                target.name AS target_name,
+                rt.name AS reltype_label,
+                r.description,
+                '←' AS direction
+            FROM relations r
+            JOIN record target ON r.rec_UUID = target.uuid
+            JOIN reltype rt ON r.reltype_id = rt.id
+            WHERE r.rel_rec_UUID = :uuid
+        """), {"uuid": uuid}).mappings().all()
+
+        log_message(f"[SQL] Found {len(result)} relations", "debug")
+        return [dict(row) for row in result]
 ##############################################################################################
 ################################## DELETE FROM DB ############################################
 ##############################################################################################

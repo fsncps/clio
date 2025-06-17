@@ -12,6 +12,9 @@
     height: auto;
     min-height: 2;  /* ✅ Prevent it from collapsing */
 
+/* .dyn-form{ */
+/*     background: red; */
+/* } */
 
  }
 #cnt-markdown-container{
@@ -28,7 +31,9 @@ height: 80vh;
 #dyn-form {
 height: 80vh;
 }
-
+#dyn-form RelationListWidget {
+    height: 1fr;
+}
 #header-form{ 
 
 }
