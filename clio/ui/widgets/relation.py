@@ -1,4 +1,6 @@
 from textual.widget import Widget
+from ...db.ops import fetch_content
+from ...utils.markdown_utils import render_markdown
 from textual.reactive import reactive
 from textual.containers import Container
 from textual.app import ComposeResult
@@ -9,6 +11,11 @@ from ...db.db import get_db
 from sqlalchemy.sql import text
 from ..widgets.tree_widget import RecordTree
 from ...ui.screens.modal.selector import RelTypeSelector
+from textual.widgets import DataTable
+from textual.message import Message
+from textual.reactive import reactive
+from ...db.ops import fetch_relations_for_record  # Assume this exists
+from textual.events import Key
 # from textual.widgets import OptionList, Input
 # from textual.widgets.option_list import Option
 
@@ -76,4 +83,55 @@ class NewRelationWidget(Widget):
     def reset_bindings(self):
         if hasattr(self.screen, "define_dynamic_controls"):
             self.screen.define_dynamic_controls()
+
+#############################################################################
+### Relation List Widget#####################################################
+
+class RelationListWidget(DataTable):
+    current_uuid: reactive[str | None] = reactive(None)
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.add_columns("↔", "Name", "Type", "Description")
+        self.relations: list[dict] = []
+
+    def set_uuid(self, uuid: str) -> None:
+        self.current_uuid = uuid
+        self.refresh_table()
+
+    def refresh_table(self) -> None:
+        self.clear()
+        self.relations = []
+
+        if not self.current_uuid:
+            return
+
+        self.relations = fetch_relations_for_record(self.current_uuid)
+        for rel in self.relations:
+            self.add_row(
+                rel["direction"],
+                rel["target_name"],
+                rel["reltype_label"],
+                rel["description"] or "",
+            )
+
+    def on_key(self, event: Key) -> None:
+        if event.key == "enter" and self.cursor_row is not None:
+            if 0 <= self.cursor_row < len(self.relations):
+                target_id = self.relations[self.cursor_row]["target_id"]
+                log_message(f"[RelationList] Enter pressed. Switching to UUID: {target_id}", "info")
+                app_state.current_UUID = target_id
+
+                content_instance = fetch_content(target_id)
+                if content_instance:
+                    markdown = render_markdown(content_instance)
+                    app_state.current_content_markdown = markdown
+                    from ...ui.screens import content_screen
+                    self.app.push_screen(content_screen.ContentScreen())  # type: ignore
+                else:
+                    log_message(f"No content found for {target_id}", "warning")
+
+
+    # def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
+    #     self.post_message(self.RelationSelected(self, target_id=event.row_key))
 
