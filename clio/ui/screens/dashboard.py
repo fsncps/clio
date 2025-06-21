@@ -1,3 +1,4 @@
+from clio.ui.screens.details_screen import DetailsScreen
 from .base_screen import BaseScreen
 from sqlalchemy import text
 from textual.app import ComposeResult
@@ -23,7 +24,8 @@ from ...db.db import engine
 from .modal.selector import AppendixSelectorScreen
 from .modal.genus import GenusPopup
 from .modal.appendix import AppendixRemoveScreen
-from ..widgets.relation import NewRelationWidget 
+from ..widgets.relation import NewRelationWidget
+from .details_screen import DetailsScreen
 
 ##############################################################################################
 ###################################### DASHBOARD SCREEN ######################################
@@ -134,6 +136,7 @@ class DashboardScreen(BaseScreen):
             "a": (self.action_add_appendix, "Add appendix"),
             "r": (self.action_remove_appendix, "Remove appendix"),
             "l": (self.action_new_relation, "New Record Relation"),
+            "j": (self.action_push_deatail_screen, "Push Details Screen"),
         }
 
 
@@ -144,7 +147,10 @@ class DashboardScreen(BaseScreen):
         """Opens the Appendix Selector Screen to choose an appendix type."""
         self.app.push_screen(AppendixSelectorScreen())
 
-
+    def action_push_deatail_screen(self) -> None:
+        """Opens the Appendix Selector Screen to choose an appendix type."""
+        from ...core.screen import ClioScreen
+        self.app.push_screen(DetailsScreen())
 
 
     def action_add_note_appendix(self) -> None:

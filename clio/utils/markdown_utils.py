@@ -1,6 +1,6 @@
 from clio.core.state import app_state
 from clio.utils.log_util import log_message
-
+from clio.core.models import RecordMarkdown
 
 
 ##############################################################################################
@@ -64,4 +64,41 @@ def render_markdown(content_instance):
 
     log_message(f"Final Markdown Output:\n{markdown_text}", "debug")
     return markdown_text
+
+
+def extract_markdown_parts(content_instance) -> RecordMarkdown:
+    """Split the rendered markdown into header, main, and appendix sections."""
+    
+    rectype = app_state.current_rectype or "UNKNOWN"
+    record_name = content_instance.header.get("title", "Untitled")
+    content_caption = app_state.current_content_caption or "Content"
+
+    header_md = f"## {rectype}: {record_name}\n\n"
+    for field, value in content_instance.header.items():
+        header_md += f"**{field.capitalize()}**: {value if value is not None else 'N/A'}\n\n"
+
+    main_md = f"\n## {content_caption}\n\n"
+    main_md += "\n\n".join(str(value) if value is not None else "" for value in content_instance.content.values())
+
+    appendix_md = ""
+    if hasattr(content_instance, "appendix"):
+        if "notes" in content_instance.appendix and content_instance.appendix["notes"]:
+            appendix_md += "\n### Notes\n"
+            for note in content_instance.appendix["notes"]:
+                appendix_md += f"- {note if note else 'Empty Note'}\n"
+
+        if "sources" in content_instance.appendix and content_instance.appendix["sources"]:
+            appendix_md += "\n### Sources\n"
+            for source in content_instance.appendix["sources"]:
+                appendix_md += f"- **{source.get('name', 'Unknown')}** ({source.get('author', 'Unknown')}, {source.get('year', 'N/A')})\n"
+
+        if "urls" in content_instance.appendix and content_instance.appendix["urls"]:
+            appendix_md += "\n### URLs\n"
+            for url in content_instance.appendix["urls"]:
+                url_title = url.get("title", "Untitled")
+                url_link = url.get("url")
+                url_href = url_link if url_link is not None else "#"
+                appendix_md += f"- [{url_title}]({url_href})\n"
+
+    return RecordMarkdown(header=header_md.strip(), main=main_md.strip(), appendix=appendix_md.strip())
 
