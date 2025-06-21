@@ -1,0 +1,98 @@
+* {
+   padding: 0 0 0 0;
+   margin: 0 0 0 0;
+}
+
+
+.title-container {
+   height: 5vh;
+   /* padding: 0 0 0 0; */
+   /* margin: 0 10 0 10; */
+   border: none;
+}
+.main-content {
+   margin: 0 0 0 0;
+/*    border: round blue; */
+   height: 70vh;
+}
+
+.bottom-bar {
+   height: 25vh
+}
+
+.console-continer {
+ border: round green;  
+ width: 35%;
+}
+
+.stat-controls-container {
+width: 15%;
+ padding: 1 1 1 2;
+}
+
+
+.dyn-controls-container {
+width: 30%;
+
+ padding: 1 1 1 1;
+}
+
+.help-pane-container {
+width: 30%;
+
+ padding: 1 1 1 1;
+}
+/* .title-md { */
+/* margin: 0 10 0 10; */
+/* padding: 0 0 0 0; */
+/* } */
+/* .title-md > MarkdownH1{ */
+/*     color: #ff8000; */
+/*     background: #10101f; */
+/* padding: 0 0 0 0; */
+/* margin: 0 0 0 0; */
+/* } */
+
+.screen-root {
+   /* border: round white; */
+   /* padding: 0 0 0 0; */
+   /* margin: 0 0 0 0; */
+   /* align: center top; */
+}
+.test-static {
+padding: 3 3 3 3;
+}
+
+MarkdownEm {
+  text-style: italic;
+  color: yellow;
+}
+
+MarkdownStrong {
+  text-style: bold;
+  color: white;
+}
+
+.details-container {
+   height: 60vh;
+   width: 100%;
+   align: top middle;
+}
+#details-content-layout {
+
+   height: 60vh;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+   align: top middle;
+}
+.header-md-container {
+  padding: 0;
+  margin: 0;
+}
+
+.content-md-container {
+  padding: 0;
+  margin: 0;
+}
+

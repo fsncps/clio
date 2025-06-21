@@ -1,0 +1,18 @@
+.header-md-container {
+   border: round white;
+   width: 40vw;
+   height: 30vh;
+   margin: 0 0 0 0;
+}
+.header-md {
+   height: 20vw;
+}
+
+.header-md MarkdownParagraph {
+padding: 0 0 0 0;
+}
+.header-md MarkdownH2 {
+align: left middle;
+border: none;
+padding: 0 0 0 1;
+}

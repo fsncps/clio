@@ -1,0 +1,14 @@
+.content-md-container {
+   border: round white;
+   max-width: 20vw;
+   max-height: 30vh;
+}
+
+.content-md MarkdownParagraph {
+padding: 0 0 0 0;
+}
+.content-md MarkdownH2 {
+align: left middle;
+border: none;
+padding: 0 0 0 1;
+}

@@ -1,0 +1,48 @@
+.console {
+border: round white;
+}
+
+.logger {
+   border: none;
+   height: 8fr;
+     overflow-x: hidden;      /* no horizontal scroll */
+  overflow-y: auto;        /* scrolls but no bar shown */
+  width: 100%;
+  height: 10fr;             /* or a fixed height if needed */
+}
+Input {
+    border: none;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+.prompt-line {
+   padding: 0 0 0 0;
+height: 1fr;
+
+align: center middle;
+}
+
+.prompt {
+border: none;
+width: 90%;
+height: 100%;
+margin-right: 2;
+padding-left: 1;
+
+  color: #a6da95;
+}
+.PS1 {
+   height: 100%;
+width: 5%;
+text-align: center;
+align: center middle;
+  color: #a6da95;
+}
+
+.prompt:focus {
+  border: none;
+  padding: 0 0 0 1;
+  height: 1;
+  background: black;
+  color: #a6da95;
+}
