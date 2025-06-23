@@ -9,7 +9,7 @@ Clio, a digital mental palace and note taking database where I record ideas, cod
 - Add appendices (sources, references, URLs)
 - Generate vector embeddings of the records
 - Create dynamic relations between records
-- Create notes with cli tool `clio note`
+- Create quick notes with cli tool `clio note`
     - pipe command output to a note: `tail ~/.clio/clio_log.txt | clio note`
     - redirect, e.g. file content: `clio note < /.clio/clio_log.txt`
 
