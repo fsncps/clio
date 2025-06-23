@@ -89,6 +89,7 @@ height: 20vh;
     height: 1fr;   /* ✅ Take all space inside `content-form` */
     min-height: 10;
     width: 100%;
+    text-wrap: wrap;
 }
 .similarity-container {
     width: 100%;
@@ -96,9 +97,9 @@ height: 20vh;
     background: rgba(255, 255, 255, 0.1);
 }
 
-#form-textarea {
-   overflow: auto;
-}
+/* #form-textarea { */
+/*    overflow: auto; */
+/* } */
 
 #similarity-tree {
     color: #76c7c0;

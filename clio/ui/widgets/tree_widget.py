@@ -1,4 +1,5 @@
 from textual.widgets import Tree
+from textual.screen import Screen
 from textual.widgets.tree import TreeNode
 from textual.reactive import reactive
 from ...db.ops import fetch_tree_data, fetch_content
@@ -9,6 +10,9 @@ from clio.utils.log_util import log_message
 from rich.style import Style
 from textual.widgets import Tree
 from textual.events import Key
+from textual.widgets import Tree
+from textual.message import Message
+from textual.widgets.tree import TreeNode, TreeDataType
 
 
 
@@ -17,14 +21,16 @@ class RecordTree(Tree):
 
     CSS_PATH = "tree.css"
 
-    def __init__(self, screen):
+    def __init__(self, screen: Screen):
         self.data = fetch_tree_data()  # Fetch the data (genera and records)
-        screen = screen
         super().__init__("Records")  # Set the correct root label
         self.populate_tree()  # Populate the tree with data
         self.selected_node = None  # Keep track of the selected node
         self.show_root = False
         self.show_guides = False
+        self.expanded_nodes: set[str] = set()
+
+
 
     def on_key(self, event):
         """Customize key behavior."""
@@ -35,13 +41,25 @@ class RecordTree(Tree):
             event.stop()  # Prevent default expansion behavior
 
     def refresh_tree(self):
-        """Refresh the tree by fetching fresh data and rebuilding it."""
-        self.data = fetch_tree_data()     # ✅ Re-fetch updated data
-        self.clear()                      # ✅ Clear all nodes
-        self.populate_tree()             # ✅ Rebuild with fresh data
-        self.refresh(layout=True)        # ✅ Repaint the tree
+        self.data = fetch_tree_data()
+        self.clear()
+        self.populate_tree()
 
+        # Restore expanded state
+        for node_id in self.expanded_nodes:
+            try:
+                node = self.get_node_by_id(node_id)
+                node.expand()
+            except Exception:
+                pass  # Node no longer exists, skip
 
+        self.refresh(layout=True)
+
+    def on_tree_node_expanded(self, message: Tree.NodeExpanded) -> None:
+        self.expanded_nodes.add(message.node.id)
+
+    def on_tree_node_collapsed(self, message: Tree.NodeCollapsed) -> None:
+        self.expanded_nodes.discard(message.node.id)
 
     def key_right(self) -> None:
         """Expand current node on →"""
